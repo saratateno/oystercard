@@ -5,6 +5,8 @@ describe Oystercard do
 subject(:oystercard) {described_class.new}
 let(:limit_fail) {Oystercard::Limit_fail}
 let(:limit) {Oystercard::Limit}
+let(:minimum_fare) {Oystercard::Minimum_fare}
+let(:insufficient_funds) {Oystercard::Insufficient_funds}
 
 context 'balance on the card' do
   it 'starting balance at 0' do
@@ -12,23 +14,24 @@ context 'balance on the card' do
   end
 
   it 'adds the arguement to the balance of the card' do
-    oystercard.top_up(5)
-    expect(oystercard.balance).to eq 5
+    oystercard.top_up(minimum_fare)
+    expect(oystercard.balance).to eq minimum_fare
   end
 
   it 'limits the amount allowed on card' do
     oystercard.top_up(limit)
-    expect{oystercard.top_up(5)}.to raise_error limit_fail
+    expect{oystercard.top_up(minimum_fare)}.to raise_error limit_fail
   end
 
   it 'deducts the fair from the card' do
-    oystercard.deduct(5)
-    expect(oystercard.balance).to eq -5
+    oystercard.deduct(minimum_fare)
+    expect(oystercard.balance).to eq -minimum_fare
   end
 end
 
 context 'starting and ending journey' do
    it 'confirms passenger in journey' do
+    oystercard.top_up(minimum_fare)
     oystercard.touch_in
     expect(oystercard.in_journey?).to eq true
    end
@@ -36,6 +39,10 @@ context 'starting and ending journey' do
    it 'confirms passenger not in journey' do
      oystercard.touch_out
      expect(oystercard.in_journey?).to eq false
+   end
+
+   it 'prevents touching in if insufficient funds' do
+     expect{oystercard.touch_in}.to raise_error insufficient_funds
    end
 end
 end

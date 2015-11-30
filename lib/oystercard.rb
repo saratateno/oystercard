@@ -2,6 +2,8 @@ class Oystercard
 
   Limit = 90
   Limit_fail = "ERROR - oystercard limited to £#{Limit}"
+  Insufficient_funds = "Insufficient funds: top up"
+  Minimum_fare = 1
 
 
 attr_reader :balance, :journey_status
@@ -21,6 +23,7 @@ attr_reader :balance, :journey_status
   end
 
   def touch_in
+    fail Insufficient_funds if balance < Minimum_fare
    @journey_status = true
   end
 
