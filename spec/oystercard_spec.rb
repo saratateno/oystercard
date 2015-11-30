@@ -22,11 +22,6 @@ context 'balance on the card' do
     oystercard.top_up(limit)
     expect{oystercard.top_up(minimum_fare)}.to raise_error limit_fail
   end
-
-  it 'deducts the fair from the card' do
-    oystercard.deduct(minimum_fare)
-    expect(oystercard.balance).to eq -minimum_fare
-  end
 end
 
 context 'starting and ending journey' do
@@ -43,6 +38,10 @@ context 'starting and ending journey' do
 
    it 'prevents touching in if insufficient funds' do
      expect{oystercard.touch_in}.to raise_error insufficient_funds
+   end
+
+   it 'deducts fare from oystercard' do
+     expect{oystercard.touch_out}.to change{oystercard.balance}.by(-minimum_fare)
    end
 end
 end

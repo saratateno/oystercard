@@ -19,11 +19,6 @@ let(:insufficient_funds) {Oystercard::Insufficient_funds}
      expect{oystercard.top_up(minimum_fare)}.to raise_error 'ERROR - oystercard limited to £90'
    end
 
-  it 'deducts the fare from the oyster card' do
-    oystercard.deduct(minimum_fare)
-    expect(oystercard.balance).to eq -minimum_fare
-  end
-
   it 'allow card to be touched in' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in
@@ -37,6 +32,10 @@ let(:insufficient_funds) {Oystercard::Insufficient_funds}
 
   it 'prevents touching in if insufficient funds' do
     expect{oystercard.touch_in}.to raise_error insufficient_funds
+  end
+
+  it 'deducts fare from oystercard' do
+    expect{oystercard.touch_out}.to change{oystercard.balance}.by(-minimum_fare)
   end
 
 end

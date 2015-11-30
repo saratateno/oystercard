@@ -18,10 +18,6 @@ attr_reader :balance, :journey_status
    @balance += amount
  end
 
-  def deduct(fare)
-    @balance -= fare
-  end
-
   def touch_in
     fail Insufficient_funds if balance < Minimum_fare
    @journey_status = true
@@ -29,10 +25,18 @@ attr_reader :balance, :journey_status
 
   def touch_out
     @journey_status = false
+    deduct(Minimum_fare)
   end
 
   def in_journey?
     journey_status
   end
+
+private
+
+  def deduct(fare)
+    @balance -= fare
+  end
+
 
 end
