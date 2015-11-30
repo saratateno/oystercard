@@ -1,11 +1,16 @@
 require 'oystercard'
 
 describe Oystercard do
-  it 'responds to balance' do
-  expect(subject).to respond_to(:balance)
-end
+
+subject(:oystercard) {described_class.new}
 
   it 'starting balance at 0' do
-    expect(subject.balance).to eq 0
+    expect(oystercard.balance).to eq 0
   end
+
+  it 'adds the arguement to the balance of the card' do
+    oystercard.top_up(5)
+    expect(oystercard.balance).to eq 5
+  end
+
 end
