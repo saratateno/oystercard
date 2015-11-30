@@ -7,10 +7,6 @@ let(:limit) {Oystercard::Limit}
    expect(oystercard.balance).to eq 0
  end
 
-#  In order to keep using public transport
-# As a customer
-# I want to add money to my card
-
   it 'allows money to be added to the card' do
     oystercard.top_up(5)
     expect(oystercard.balance).to eq 5
@@ -20,5 +16,13 @@ let(:limit) {Oystercard::Limit}
      oystercard.top_up(limit)
      expect{oystercard.top_up(5)}.to raise_error 'ERROR - oystercard limited to £90'
    end
+#    In order to pay for my journey
+# As a customer
+# I need my fare deducted from my card
+
+  it 'deducts the fare from the oyster card' do
+    oystercard.deduct(5)
+    expect(oystercard.balance).to eq -5
+  end
 
 end

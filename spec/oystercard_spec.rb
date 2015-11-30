@@ -19,4 +19,12 @@ let(:limit) {Oystercard::Limit}
     oystercard.top_up(limit)
     expect{oystercard.top_up(5)}.to raise_error limit_fail
   end
+
+  it {is_expected.to respond_to(:deduct)}
+
+  it 'deducts the fair from the card' do
+    oystercard.deduct(5)
+    expect(oystercard.balance).to eq -5
+  end
+
 end
