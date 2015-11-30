@@ -1,5 +1,9 @@
 class Oystercard
 
+  Limit = 90
+  Limit_fail = "ERROR - oystercard limited to £#{Limit}"
+
+
 attr_reader :balance
 
  def initialize
@@ -7,6 +11,7 @@ attr_reader :balance
  end
 
  def top_up(amount)
+   fail Limit_fail if balance + amount > Limit
    @balance += amount
  end
 
