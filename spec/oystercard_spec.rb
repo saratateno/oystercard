@@ -13,6 +13,13 @@ subject(:card) {described_class.new}
         card.top_up(10)
         expect(card.balance).to eq 10
     end
+
+    it 'should increase the existing balance by an amount' do
+        card.top_up(10)
+        card.top_up(5)
+        expect(card.balance).to eq 15
+    end
+    
   end
 
 
