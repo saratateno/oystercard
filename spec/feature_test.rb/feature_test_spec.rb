@@ -1,6 +1,7 @@
 describe "Features Tests" do
 
 let(:oystercard) {Oystercard.new}
+let(:limit) {Oystercard::Limit}
 
  it 'creates a new oystercard with a balance of 0' do
    expect(oystercard.balance).to eq 0
@@ -16,7 +17,7 @@ let(:oystercard) {Oystercard.new}
   end
 
    it 'limits the amount allowed on card' do
-     oystercard.top_up(90)
+     oystercard.top_up(limit)
      expect{oystercard.top_up(5)}.to raise_error 'ERROR - oystercard limited to £90'
    end
 

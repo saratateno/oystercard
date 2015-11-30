@@ -4,6 +4,7 @@ describe Oystercard do
 
 subject(:oystercard) {described_class.new}
 let(:limit_fail) {Oystercard::Limit_fail}
+let(:limit) {Oystercard::Limit}
 
   it 'starting balance at 0' do
     expect(oystercard.balance).to eq 0
@@ -15,7 +16,7 @@ let(:limit_fail) {Oystercard::Limit_fail}
   end
 
   it 'limits the amount allowed on card' do
-    oystercard.top_up(90)
+    oystercard.top_up(limit)
     expect{oystercard.top_up(5)}.to raise_error limit_fail
   end
 end
