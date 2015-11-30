@@ -1,4 +1,4 @@
 require 'oystercard'
 
-describe Oystercard
+describe Oystercard do
 end
