@@ -25,4 +25,13 @@ let(:limit) {Oystercard::Limit}
     expect(oystercard.balance).to eq -5
   end
 
+  it 'allow card to be touched in' do
+    oystercard.touch_in
+    expect(oystercard.in_journey?).to eq true
+  end
+
+  it 'allow card to be touched out' do
+    oystercard.touch_out
+    expect(oystercard.in_journey?).to eq false
+  end
 end

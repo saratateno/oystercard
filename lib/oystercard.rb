@@ -4,7 +4,8 @@ class Oystercard
   Limit_fail = "ERROR - oystercard limited to £#{Limit}"
 
 
-attr_reader :balance
+attr_reader :balance, :journey_status
+
 
  def initialize
    @balance = 0
@@ -17,6 +18,18 @@ attr_reader :balance
 
   def deduct(fare)
     @balance -= fare
+  end
+
+  def touch_in
+   @journey_status = true
+  end
+
+  def touch_out
+    @journey_status = false
+  end
+
+  def in_journey?
+    journey_status
   end
 
 end
