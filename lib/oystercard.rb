@@ -36,6 +36,4 @@ private
   def deduct(fare)
     @balance -= fare
   end
-
-
 end
