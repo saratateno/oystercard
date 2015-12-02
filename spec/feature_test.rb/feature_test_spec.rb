@@ -4,6 +4,8 @@ let(:oystercard) {Oystercard.new}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
 let(:minimum_fare) {Oystercard::MINIMUM_FARE}
 let(:station) {double :station}
+let(:in_station) {double :station}
+let(:out_station) {double :station}
 
 
   it 'creates a new oystercard with a balance of 0' do
@@ -25,7 +27,7 @@ let(:station) {double :station}
   end
 
   it 'deducts fare from oystercard' do
-    expect{oystercard.touch_out}.to change{oystercard.balance}.by(-minimum_fare)
+    expect{oystercard.touch_out(station)}.to change{oystercard.balance}.by(-minimum_fare)
   end
 
   it 'remembers the entry station after touch in' do
@@ -37,8 +39,29 @@ let(:station) {double :station}
   it 'forgets the entry station on touch out' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(station)
-    oystercard.touch_out
+    oystercard.touch_out(station)
     expect(oystercard.entry_station).to eq nil
   end
+
+  it 'store a journey' do
+    oystercard.top_up(minimum_fare)
+    oystercard.touch_in(in_station)
+    oystercard.touch_out(out_station)
+    current_journey = { entry_station: in_station, exit_station: out_station }
+    expect(oystercard.current_journey).to eq current_journey
+  end
+
+  it 'starts with an empty journey history' do
+     expect(oystercard.history).to be_empty
+  end
+  #
+  # it 'stores multiple journeys' do
+  #   2.times do
+  #     oystercard.top_up(minimum_fare)
+  #     oystercard.touch_in(in_station)
+  #     oystercard.touch_out(out_station)
+  #   end
+  #   expect(oystercard.history).to eq
+  # end
 
 end
