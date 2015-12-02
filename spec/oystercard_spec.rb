@@ -35,7 +35,7 @@ let(:out_station) {double :station}
     it 'remembers the entry station upon touch in' do
       oystercard.top_up(minimum_fare)
       oystercard.touch_in(station)
-      expect(oystercard.entry_station).to eq station
+      expect(journey.entry_station).to eq station
     end
 
   end
