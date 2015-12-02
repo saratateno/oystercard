@@ -20,17 +20,6 @@ let(:station) {double :station}
      expect{oystercard.top_up(1)}.to raise_error "ERROR - oystercard limited to £#{maximum_balance}"
    end
 
-  it 'allow card to be touched in' do
-    oystercard.top_up(minimum_fare)
-    oystercard.touch_in(station)
-    expect(oystercard.in_journey?).to eq true
-  end
-
-  it 'allow card to be touched out' do
-    oystercard.touch_out
-    expect(oystercard.in_journey?).to eq false
-  end
-
   it 'prevents touching in if insufficient funds' do
     expect{oystercard.touch_in(station)}.to raise_error 'Insufficient funds: top up'
   end
@@ -43,6 +32,13 @@ let(:station) {double :station}
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(station)
     expect(oystercard.entry_station).to eq station
+  end
+
+  it 'forgets the entry station on touch out' do
+    oystercard.top_up(minimum_fare)
+    oystercard.touch_in(station)
+    oystercard.touch_out
+    expect(oystercard.entry_station).to eq nil
   end
 
 end

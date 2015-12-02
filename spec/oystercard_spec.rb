@@ -25,11 +25,6 @@ let(:station) {double :station}
   end
 
   describe '#touch_in' do
-    it 'confirms passenger is in a journey' do
-      oystercard.top_up(minimum_fare)
-      oystercard.touch_in(station)
-      expect(oystercard.in_journey?).to eq true
-    end
 
     it 'prevents touching in if insufficient funds' do
        expect{oystercard.touch_in(station)}.to raise_error 'Insufficient funds: top up'
@@ -44,13 +39,16 @@ let(:station) {double :station}
   end
 
   describe '#touch_out' do
-    it 'confirms passenger not in journey' do
-      oystercard.touch_out
-      expect(oystercard.in_journey?).to eq false
-    end
 
     it 'deducts fare from oystercard' do
       expect{oystercard.touch_out}.to change{oystercard.balance}.by(-minimum_fare)
+    end
+
+    it 'sets entry station to equal nil' do
+      oystercard.top_up(minimum_fare)
+      oystercard.touch_in(station)
+      oystercard.touch_out
+      expect(oystercard.entry_station).to eq nil
     end
   end
 end
