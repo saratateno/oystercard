@@ -1,30 +1,29 @@
 class Oystercard
 
-  Limit = 90
-  Limit_fail = "ERROR - oystercard limited to £#{Limit}"
-  Insufficient_funds = "Insufficient funds: top up"
-  Minimum_fare = 1
+  MAXIMUM_BALANCE = 90
+  MINIMUM_FARE = 1
 
-
-attr_reader :balance, :journey_status
+attr_reader :balance, :journey_status, :entry_station
 
  def initialize
    @balance = 0
+   @entry_station = nil
  end
 
  def top_up(amount)
-   fail Limit_fail if balance + amount > Limit
+   fail "ERROR - oystercard limited to £#{MAXIMUM_BALANCE}" if balance + amount > MAXIMUM_BALANCE
    @balance += amount
  end
 
-  def touch_in
-    fail Insufficient_funds if balance < Minimum_fare
+  def touch_in(station)
+    fail 'Insufficient funds: top up' if balance < MINIMUM_FARE
    @journey_status = true
+   @entry_station = station
   end
 
   def touch_out
     @journey_status = false
-    deduct(Minimum_fare)
+    deduct(MINIMUM_FARE)
   end
 
   def in_journey?
