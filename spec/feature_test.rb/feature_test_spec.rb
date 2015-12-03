@@ -9,8 +9,6 @@ let(:station) {Station.new('Shoreditch',1)}
 let(:journey) {Journey.new}
 let(:penalty) {Journey::PENALTY}
 
-
-
   it 'creates a new oystercard with a balance of 0' do
      expect(oystercard.balance).to eq 0
   end
@@ -30,6 +28,8 @@ let(:penalty) {Journey::PENALTY}
   end
 
   it 'deducts fare from oystercard' do
+    oystercard.top_up(10)
+    oystercard.touch_in(station)
     expect{oystercard.touch_out(out_station)}.to change{oystercard.balance}.by(-minimum_fare)
   end
 
@@ -67,11 +67,6 @@ let(:penalty) {Journey::PENALTY}
   end
 
   describe 'Journey' do
-
-    # it 'begins a journey when card touches in' do
-    #
-    # end
-
     it 'saves entry station when journey begins' do
       journey.begin(in_station)
       current_journey = {entry_station: in_station}
@@ -113,10 +108,15 @@ let(:penalty) {Journey::PENALTY}
       expect(journey.in_journey?).to eq false
     end
 
-    it 'issues penalty when beginning a journey while already in a journey' do
+    it 'issues penalty when beginning a journey without touching out previous journey' do
       oystercard.top_up(10)
       oystercard.touch_in(in_station)
       expect{oystercard.touch_in(in_station)}.to change{oystercard.balance}.by(-penalty)
+    end
+
+    it 'issues penalty when ending a journey without having touched in' do
+      oystercard.top_up(10)
+      expect{oystercard.touch_out(station)}.to change{oystercard.balance}.by(-penalty)
     end
   end
 

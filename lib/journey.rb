@@ -12,16 +12,15 @@ class Journey
   end
 
   def begin(station)
-    @penalty_incurred = true if in_journey?
+    incur_penalty if in_journey?
     @current[:entry_station]= station
   end
 
   def end(station)
     @penalty_incurred = false
-    @penalty_incurred = true if !in_journey?
+    incur_penalty if !in_journey?
     @current[:exit_station]= station
-    @log << @current
-    @current = Hash.new
+    add_to_log
   end
 
   def fare
@@ -34,6 +33,16 @@ class Journey
 
   def in_journey?
     !@current.empty?
+  end
+
+private
+  def add_to_log
+    @log << @current
+    @current = Hash.new
+  end
+
+  def incur_penalty
+    @penalty_incurred = true
   end
 
 end

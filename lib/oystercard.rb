@@ -25,7 +25,7 @@ attr_reader :balance, :journey
 
   def touch_out(station)
     journey.end(station)
-    deduct(journey.fare)
+    journey.penalty.zero? ? deduct(journey.fare) : deduct(journey.penalty)
   end
 
 private
