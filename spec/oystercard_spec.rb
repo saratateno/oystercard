@@ -58,7 +58,7 @@ let(:out_station) {double :station}
       oystercard.touch_in(in_station)
       oystercard.touch_out(out_station)
       current_journey = { entry_station: in_station, exit_station: out_station }
-      expect(oystercard.current_journey).to eq current_journey
+      expect(oystercard.history).to eq [current_journey]
     end
 
     it 'starts with an empty journey history' do

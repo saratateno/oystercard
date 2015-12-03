@@ -28,6 +28,7 @@ attr_reader :balance, :entry_station, :history, :current_journey
     @entry_station = nil
     @current_journey[:exit_station]=station
     @history << @current_journey
+    @current_journey = Hash.new
   end
 
 private

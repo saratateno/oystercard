@@ -3,9 +3,11 @@ describe "Features Tests" do
 let(:oystercard) {Oystercard.new}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
 let(:minimum_fare) {Oystercard::MINIMUM_FARE}
-let(:in_station) {double :station}
-let(:out_station) {double :station}
+let(:in_station) {Station.new('Aldgate',1)}
+let(:out_station) {Station.new('Bank',1)}
 let(:station) {Station.new('Shoreditch',1)}
+let(:journey) {Journey.new}
+
 
 
   it 'creates a new oystercard with a balance of 0' do
@@ -48,7 +50,7 @@ let(:station) {Station.new('Shoreditch',1)}
     oystercard.touch_in(in_station)
     oystercard.touch_out(out_station)
     current_journey = { entry_station: in_station, exit_station: out_station }
-    expect(oystercard.current_journey).to eq current_journey
+    expect(oystercard.history).to eq [current_journey]
   end
 
   it 'starts with an empty journey history' do
@@ -62,4 +64,37 @@ let(:station) {Station.new('Shoreditch',1)}
   it 'creates a new station and sets its zone as an instance variable' do
     expect(station.zone).to eq 1
   end
+
+  describe 'Journey' do
+
+    # it 'begins a journey when card touches in' do
+    #
+    # end
+
+    it 'saves entry station when journey begins' do
+      journey.begin(in_station)
+      current_journey = {entry_station: in_station}
+      expect(journey.current).to eq current_journey
+    end
+
+    it 'saves exit station when journey ends' do
+      journey.end(out_station)
+      expect(journey.log[0][:exit_station]).to eq out_station
+    end
+
+    it 'saves complete journey in a journey log' do
+      journey.begin(in_station)
+      journey.end(out_station)
+      journey_log = [{entry_station: in_station, exit_station: out_station}]
+      expect(journey.log).to eq journey_log
+    end
+
+    it 'clears current journey when journey ends' do
+      journey.begin(in_station)
+      journey.end(out_station)
+      expect(journey.current).to eq Hash.new
+    end
+
+  end
+
 end
