@@ -5,6 +5,7 @@ describe Journey do
   let(:in_station)  { double :station     }
   let(:out_station) { double :station     }
   let(:minimum_fare) { Journey::MINIMUM_FARE}
+  let(:penalty) {Journey::PENALTY}
 
   it { is_expected.to respond_to(:current) }
   it { is_expected.to respond_to(:begin).with(1).argument }
@@ -52,6 +53,17 @@ describe Journey do
     journey.begin(in_station)
     journey.end(out_station)
     expect(journey.in_journey?).to eq false
+  end
+
+  it 'issues penalty when beginning a journey while already in a journey' do
+    allow(journey).to receive(:in_journey?).and_return(true)
+    journey.begin(in_station)
+    expect(journey.penalty).to eq penalty
+  end
+
+  it 'issues penalty when ending a journey while not in a journey' do
+    journey.end(out_station)
+    expect(journey.penalty).to eq penalty
   end
 
 end

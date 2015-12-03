@@ -65,4 +65,14 @@ let(:out_station) {double :station}
        expect(oystercard.history).to be_empty
     end
   end
+
+  describe 'edge cases' do
+    it 'issues penalty when beginning a journey while already in a journey' do
+      oystercard.top_up(10)
+      oystercard.touch_in(in_station)
+      expect{oystercard.touch_in(in_station)}.to change{oystercard.balance}.by(-penalty)
+    end
+
+  end
+
 end

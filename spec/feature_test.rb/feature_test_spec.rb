@@ -7,6 +7,7 @@ let(:in_station) {Station.new('Aldgate',1)}
 let(:out_station) {Station.new('Bank',1)}
 let(:station) {Station.new('Shoreditch',1)}
 let(:journey) {Journey.new}
+let(:penalty) {Journey::PENALTY}
 
 
 
@@ -111,6 +112,13 @@ let(:journey) {Journey.new}
       journey.end(out_station)
       expect(journey.in_journey?).to eq false
     end
+
+    it 'issues penalty when beginning a journey while already in a journey' do
+      oystercard.top_up(10)
+      oystercard.touch_in(in_station)
+      expect{oystercard.touch_in(in_station)}.to change{oystercard.balance}.by(-penalty)
+    end
+
 
   end
 
