@@ -1,5 +1,7 @@
 class Journey
 
+  MINIMUM_FARE = 1
+
   attr_reader :current, :log
 
   def initialize
@@ -15,6 +17,14 @@ class Journey
     @current[:exit_station]= station
     @log << @current
     @current = Hash.new
+  end
+
+  def fare
+    MINIMUM_FARE
+  end
+
+  def in_journey?
+    !@current.empty? 
   end
 
 end

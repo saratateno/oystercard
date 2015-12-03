@@ -2,7 +2,7 @@ describe "Features Tests" do
 
 let(:oystercard) {Oystercard.new}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
-let(:minimum_fare) {Oystercard::MINIMUM_FARE}
+let(:minimum_fare) {Journey::MINIMUM_FARE}
 let(:in_station) {Station.new('Aldgate',1)}
 let(:out_station) {Station.new('Bank',1)}
 let(:station) {Station.new('Shoreditch',1)}
@@ -93,6 +93,23 @@ let(:journey) {Journey.new}
       journey.begin(in_station)
       journey.end(out_station)
       expect(journey.current).to eq Hash.new
+    end
+
+    it 'calculates a fare when journey ends' do
+      journey.begin(in_station)
+      journey.end(out_station)
+      expect(journey.fare).to eq minimum_fare
+    end
+
+    it 'tracks if in a journey when one has begun' do
+      journey.begin(in_station)
+      expect(journey.in_journey?).to eq true
+    end
+
+    it 'tracks it is not in a journey when one has ended' do
+      journey.begin(in_station)
+      journey.end(out_station)
+      expect(journey.in_journey?).to eq false
     end
 
   end
