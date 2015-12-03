@@ -36,14 +36,14 @@ let(:penalty) {Journey::PENALTY}
   it 'remembers the entry station after touch in' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(in_station)
-    expect(oystercard.entry_station).to eq in_station
+    expect(oystercard.journey.current[:entry_station]).to eq in_station
   end
 
   it 'forgets the entry station on touch out' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(in_station)
     oystercard.touch_out(out_station)
-    expect(oystercard.entry_station).to eq nil
+    expect(oystercard.journey.current).to eq Hash.new
   end
 
   it 'store a journey' do
@@ -51,11 +51,11 @@ let(:penalty) {Journey::PENALTY}
     oystercard.touch_in(in_station)
     oystercard.touch_out(out_station)
     current_journey = { entry_station: in_station, exit_station: out_station }
-    expect(oystercard.history).to eq [current_journey]
+    expect(oystercard.journey.log).to eq [current_journey]
   end
 
   it 'starts with an empty journey history' do
-     expect(oystercard.history).to be_empty
+     expect(oystercard.journey.log).to be_empty
   end
 
   it 'creates a new station and sets its name as an instance variable' do
@@ -118,8 +118,6 @@ let(:penalty) {Journey::PENALTY}
       oystercard.touch_in(in_station)
       expect{oystercard.touch_in(in_station)}.to change{oystercard.balance}.by(-penalty)
     end
-
-
   end
 
 end
