@@ -85,12 +85,6 @@ let(:penalty_charge) {Journey::PENALTY_CHARGE}
       expect(journey.in_journey?).to eq true
     end
 
-    it 'knows that it is not in a journey when one has ended' do
-      journey.begin(station1)
-      journey.end(station2)
-      expect(journey.in_journey?).to eq false
-    end
-
     it 'doesn\'t incur a penalty when a journey is complete' do
       journey.begin(station1)
       journey.end(station2)
@@ -114,6 +108,13 @@ let(:penalty_charge) {Journey::PENALTY_CHARGE}
       journey.end(station2)
       expect(journey.penalty).to eq 0
     end
+
+    it 'stores information about the last journey' do
+      journey.begin(station1)
+      journey.end(station2)
+      expect(journey.info).to eq({entry: station1, exit: station2})
+    end
+
 
   end
 
