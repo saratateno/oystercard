@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 
-subject(:oystercard) {described_class.new}
+subject(:oystercard) {described_class.new(journey: double(:journey, begin: 666 , end: 666, info: {entry: station1, exit: station2}))}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
 let(:minimum_fare) {Journey::MINIMUM_FARE}
 let(:station) {double :station}

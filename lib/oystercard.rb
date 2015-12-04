@@ -6,10 +6,10 @@ class Oystercard
 
   attr_reader :balance, :history, :journey
 
-  def initialize
+  def initialize(journey: Journey.new)
     @balance = 0
     @history = Hash.new
-    @journey = Journey.new
+    @journey = journey
   end
 
   def top_up(amount)
