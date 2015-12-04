@@ -3,7 +3,7 @@ describe "Features Tests" do
 let(:oystercard) {Oystercard.new}
 let(:journey) {Journey.new}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
-let(:minimum_fare) {Oystercard::MINIMUM_FARE}
+let(:minimum_fare) {Journey::MINIMUM_FARE}
 let(:station1) {Station.new('Kings Cross',1)}
 let(:station2) {Station.new('Shoreditch',1)}
 let(:penalty_charge) {Journey::PENALTY_CHARGE}
@@ -34,21 +34,14 @@ let(:penalty_charge) {Journey::PENALTY_CHARGE}
   it 'remembers the entry station after touch in' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(station1)
-    expect(oystercard.entry_station).to eq station1
-  end
-
-  it 'forgets the entry station on touch out' do
-    oystercard.top_up(minimum_fare)
-    oystercard.touch_in(station1)
-    oystercard.touch_out(station2)
-    expect(oystercard.entry_station).to eq nil
+    expect(oystercard.journey.info[:entry]).to eq station1
   end
 
   it 'stores a journey history' do
     oystercard.top_up(minimum_fare)
     oystercard.touch_in(station1)
     oystercard.touch_out(station2)
-    journey1 = { entry_station: station1, exit_station: station2 }
+    journey1 = { entry: station1, exit: station2 }
     expect(oystercard.history[:journey1]).to eq journey1
   end
 
@@ -68,12 +61,12 @@ let(:penalty_charge) {Journey::PENALTY_CHARGE}
 
     it 'stores an entry station when a journey begins' do
       journey.begin(station1)
-      expect(journey.entry_station).to eq station1
+      expect(journey.info[:entry]).to eq station1
     end
 
     it 'stores an exit station when a journey ends' do
       journey.end(station2)
-      expect(journey.exit_station).to eq station2
+      expect(journey.info[:exit]).to eq station2
     end
 
     it 'calculates the fare for a complete journey' do
