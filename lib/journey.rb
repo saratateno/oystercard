@@ -5,6 +5,7 @@ class Journey
 
 
   MINIMUM_FARE = 1
+  PENALTY_CHARGE = 6
 
   def initialize
     @entry_station = nil
@@ -24,6 +25,10 @@ class Journey
 
   def fare
     MINIMUM_FARE
+  end
+
+  def penalty
+   incur_penalty ? PENALTY_CHARGE : 0
   end
 
   def in_journey?

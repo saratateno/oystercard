@@ -6,6 +6,7 @@ let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
 let(:minimum_fare) {Oystercard::MINIMUM_FARE}
 let(:station1) {Station.new('Kings Cross',1)}
 let(:station2) {Station.new('Shoreditch',1)}
+let(:penalty_charge) {Journey::PENALTY_CHARGE}
 
 
   it 'creates a new oystercard with a balance of 0' do
@@ -97,9 +98,21 @@ let(:station2) {Station.new('Shoreditch',1)}
     end
 
     it 'incurs a penalty when a journey has started but not ended' do
-      allow(journey).to receive(:in_journey?) {true}
+      journey.begin(station1)
       journey.begin(station2)
       expect(journey.incur_penalty?).to eq true
+    end
+
+    it 'charges a fine if the user has incurred a penalty' do
+      journey.begin(station1)
+      journey.begin(station2)
+      expect(journey.penalty).to eq penalty_charge
+    end
+
+    it 'does not charge a fine if the user has not incurred a penalty' do
+      journey.begin(station1)
+      journey.end(station2)
+      expect(journey.penalty).to eq 0
     end
 
   end
