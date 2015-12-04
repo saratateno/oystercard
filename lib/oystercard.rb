@@ -8,7 +8,7 @@ attr_reader :balance, :entry_station, :history, :current_journey
  def initialize
    @balance = 0
    @entry_station = nil
-   @history = []
+   @history = Hash.new
    @current_journey = Hash.new
  end
 
@@ -27,7 +27,12 @@ attr_reader :balance, :entry_station, :history, :current_journey
     deduct(MINIMUM_FARE)
     @entry_station = nil
     @current_journey[:exit_station]=station
-    @history << @current_journey
+    @history[:"journey#{index}"] = @current_journey
+    @current_journey = Hash.new
+  end
+
+  def index
+    history.count + 1
   end
 
 private
@@ -39,4 +44,6 @@ private
   def in_journey?
     !!entry_station
   end
+
+
 end

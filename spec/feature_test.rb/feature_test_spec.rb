@@ -1,11 +1,11 @@
 describe "Features Tests" do
 
 let(:oystercard) {Oystercard.new}
+let(:journey) {Journey.new}
 let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
 let(:minimum_fare) {Oystercard::MINIMUM_FARE}
-let(:in_station) {double :station}
-let(:out_station) {double :station}
-let(:station) {Station.new('Shoreditch',1)}
+let(:station1) {Station.new('Kings Cross',1)}
+let(:station2) {Station.new('Shoreditch',1)}
 
 
   it 'creates a new oystercard with a balance of 0' do
@@ -23,32 +23,32 @@ let(:station) {Station.new('Shoreditch',1)}
    end
 
   it 'prevents touching in if insufficient funds' do
-    expect{oystercard.touch_in(in_station)}.to raise_error 'Insufficient funds: top up'
+    expect{oystercard.touch_in(station1)}.to raise_error 'Insufficient funds: top up'
   end
 
   it 'deducts fare from oystercard' do
-    expect{oystercard.touch_out(out_station)}.to change{oystercard.balance}.by(-minimum_fare)
+    expect{oystercard.touch_out(station1)}.to change{oystercard.balance}.by(-minimum_fare)
   end
 
   it 'remembers the entry station after touch in' do
     oystercard.top_up(minimum_fare)
-    oystercard.touch_in(in_station)
-    expect(oystercard.entry_station).to eq in_station
+    oystercard.touch_in(station1)
+    expect(oystercard.entry_station).to eq station1
   end
 
   it 'forgets the entry station on touch out' do
     oystercard.top_up(minimum_fare)
-    oystercard.touch_in(in_station)
-    oystercard.touch_out(out_station)
+    oystercard.touch_in(station1)
+    oystercard.touch_out(station2)
     expect(oystercard.entry_station).to eq nil
   end
 
-  it 'store a journey' do
+  it 'stores a journey history' do
     oystercard.top_up(minimum_fare)
-    oystercard.touch_in(in_station)
-    oystercard.touch_out(out_station)
-    current_journey = { entry_station: in_station, exit_station: out_station }
-    expect(oystercard.current_journey).to eq current_journey
+    oystercard.touch_in(station1)
+    oystercard.touch_out(station2)
+    journey1 = { entry_station: station1, exit_station: station2 }
+    expect(oystercard.history[:journey1]).to eq journey1
   end
 
   it 'starts with an empty journey history' do
@@ -56,10 +56,20 @@ let(:station) {Station.new('Shoreditch',1)}
   end
 
   it 'creates a new station and sets its name as an instance variable' do
-    expect(station.name).to eq 'Shoreditch'
+    expect(station1.name).to eq 'Kings Cross'
   end
 
   it 'creates a new station and sets its zone as an instance variable' do
-    expect(station.zone).to eq 1
+    expect(station1.zone).to eq 1
   end
+
+  describe 'Journey class' do
+
+    it 'stores an entry station when a journey begins' do
+      journey.begin(station1)
+      expect(journey.entry_station).to eq station1
+    end
+
+  end
+
 end
