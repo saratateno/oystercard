@@ -70,6 +70,15 @@ let(:station2) {Station.new('Shoreditch',1)}
       expect(journey.entry_station).to eq station1
     end
 
+    it 'stores an exit station when a journey ends' do
+      journey.end(station2)
+      expect(journey.exit_station).to eq station2
+    end
+
+    it 'calculates the fare for a complete journey' do
+      expect(journey.fare).to eq minimum_fare
+    end
+
   end
 
 end
