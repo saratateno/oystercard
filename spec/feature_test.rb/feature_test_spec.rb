@@ -90,6 +90,18 @@ let(:station2) {Station.new('Shoreditch',1)}
       expect(journey.in_journey?).to eq false
     end
 
+    it 'doesn\'t incur a penalty when a journey is complete' do
+      journey.begin(station1)
+      journey.end(station2)
+      expect(journey.incur_penalty?).to eq false
+    end
+
+    it 'incurs a penalty when a journey has started but not ended' do
+      allow(journey).to receive(:in_journey?) {true}
+      journey.begin(station2)
+      expect(journey.incur_penalty?).to eq true
+    end
+
   end
 
 end
