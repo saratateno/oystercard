@@ -7,6 +7,7 @@ describe Journey do
   let(:station2) {Station.new('Shoreditch',1)}
   let(:minimum_fare) {Journey::MINIMUM_FARE}
 
+
   it 'stores an entry station when a journey begins' do
     journey.begin(station1)
     expect(journey.entry_station).to eq station1
@@ -19,6 +20,17 @@ describe Journey do
 
   it 'calculates the fare for a complete journey' do
     expect(journey.fare).to eq minimum_fare
+  end
+
+  it 'knows when a journey is in progress' do
+    journey.begin(station1)
+    expect(journey.in_journey?).to eq true
+  end
+
+  it 'knows that it is not in a journey when one has ended' do
+    journey.begin(station1)
+    journey.end(station2)
+    expect(journey.in_journey?).to eq false
   end
 
 end
